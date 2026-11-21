@@ -1,0 +1,173 @@
+﻿newman
+
+Lab 5 Registration API
+
+□ Happy path
+└ Set up student
+  PUT http://127.0.0.1:3000/students/lab05-student-1 [200 OK, 178B, 220ms]
+  √  HTTP 200
+  √  result is OK
+
+└ Set up course
+  PUT http://127.0.0.1:3000/courses/lab05-course-1 [200 OK, 178B, 15ms]
+  √  HTTP 200
+  √  result is OK
+
+└ Happy path: OK
+  POST http://127.0.0.1:3000/registrations [201 Created, 202B, 10ms]
+  √  HTTP 201
+  √  result is OK
+  √  Registration ID is a positive integer
+
+□ Missing student
+└ Set up course
+  PUT http://127.0.0.1:3000/courses/lab05-course-2 [200 OK, 178B, 12ms]
+  √  HTTP 200
+  √  result is OK
+
+└ Missing student: ERROR_NO_STUDENT
+  POST http://127.0.0.1:3000/registrations [200 OK, 192B, 12ms]
+  √  HTTP 200
+  √  result is ERROR_NO_STUDENT
+
+□ Inactive student
+└ Set up student
+  PUT http://127.0.0.1:3000/students/lab05-student-3 [200 OK, 178B, 13ms]
+  √  HTTP 200
+  √  result is OK
+
+└ Set up course
+  PUT http://127.0.0.1:3000/courses/lab05-course-3 [200 OK, 178B, 8ms]
+  √  HTTP 200
+  √  result is OK
+
+└ Inactive student: ERROR_INACTIVE_STUDENT
+  POST http://127.0.0.1:3000/registrations [200 OK, 198B, 10ms]
+  √  HTTP 200
+  √  result is ERROR_INACTIVE_STUDENT
+
+□ Missing course
+└ Set up student
+  PUT http://127.0.0.1:3000/students/lab05-student-4 [200 OK, 178B, 11ms]
+  √  HTTP 200
+  √  result is OK
+
+└ Missing course: ERROR_NO_COURSE
+  POST http://127.0.0.1:3000/registrations [200 OK, 191B, 10ms]
+  √  HTTP 200
+  √  result is ERROR_NO_COURSE
+
+□ Missing prerequisites
+└ Set up student
+  PUT http://127.0.0.1:3000/students/lab05-student-5 [200 OK, 178B, 8ms]
+  √  HTTP 200
+  √  result is OK
+
+└ Set up course
+  PUT http://127.0.0.1:3000/courses/lab05-course-5 [200 OK, 178B, 6ms]
+  √  HTTP 200
+  √  result is OK
+
+└ Missing prerequisites: ERROR_PREREQUISITES
+  POST http://127.0.0.1:3000/registrations [200 OK, 215B, 5ms]
+  √  HTTP 200
+  √  result is ERROR_PREREQUISITES
+  √  Missing prerequisite list
+
+□ Inactive and missing course
+└ Set up student
+  PUT http://127.0.0.1:3000/students/lab05-student-6 [200 OK, 178B, 6ms]
+  √  HTTP 200
+  √  result is OK
+
+└ Inactive and missing course: ERROR_INACTIVE_STUDENT
+  POST http://127.0.0.1:3000/registrations [200 OK, 198B, 7ms]
+  √  HTTP 200
+  √  result is ERROR_INACTIVE_STUDENT
+
+□ No prerequisites
+└ Set up student
+  PUT http://127.0.0.1:3000/students/lab05-student-7 [200 OK, 178B, 8ms]
+  √  HTTP 200
+  √  result is OK
+
+└ Set up course
+  PUT http://127.0.0.1:3000/courses/lab05-course-7 [200 OK, 178B, 7ms]
+  √  HTTP 200
+  √  result is OK
+
+└ No prerequisites: OK
+  POST http://127.0.0.1:3000/registrations [201 Created, 202B, 7ms]
+  √  HTTP 201
+  √  result is OK
+  √  Registration ID is a positive integer
+
+□ Partial prerequisites
+└ Set up student
+  PUT http://127.0.0.1:3000/students/lab05-student-8 [200 OK, 178B, 6ms]
+  √  HTTP 200
+  √  result is OK
+
+└ Set up course
+  PUT http://127.0.0.1:3000/courses/lab05-course-8 [200 OK, 178B, 7ms]
+  √  HTTP 200
+  √  result is OK
+
+└ Partial prerequisites: ERROR_PREREQUISITES
+  POST http://127.0.0.1:3000/registrations [200 OK, 215B, 6ms]
+  √  HTTP 200
+  √  result is ERROR_PREREQUISITES
+  √  Missing prerequisite list
+
+□ Missing studentID
+└ Set up student
+  PUT http://127.0.0.1:3000/students/lab05-student-9 [200 OK, 178B, 6ms]
+  √  HTTP 200
+  √  result is OK
+
+└ Set up course
+  PUT http://127.0.0.1:3000/courses/lab05-course-9 [200 OK, 178B, 7ms]
+  √  HTTP 200
+  √  result is OK
+
+└ Missing studentID: ERROR_BAD_REQUEST
+  POST http://127.0.0.1:3000/registrations [400 Bad Request, 202B, 6ms]
+  √  HTTP 400
+  √  result is ERROR_BAD_REQUEST
+
+□ Malformed JSON
+└ Set up student
+  PUT http://127.0.0.1:3000/students/lab05-student-10 [200 OK, 178B, 6ms]
+  √  HTTP 200
+  √  result is OK
+
+└ Set up course
+  PUT http://127.0.0.1:3000/courses/lab05-course-10 [200 OK, 178B, 6ms]
+  √  HTTP 200
+  √  result is OK
+
+└ Malformed JSON: ERROR_BAD_JSON
+  POST http://127.0.0.1:3000/registrations [400 Bad Request, 199B, 7ms]
+  √  HTTP 400
+  √  result is ERROR_BAD_JSON
+
+┌─────────────────────────┬───────────────────┬──────────────────┐
+│                         │          executed │           failed │
+├─────────────────────────┼───────────────────┼──────────────────┤
+│              iterations │                 1 │                0 │
+├─────────────────────────┼───────────────────┼──────────────────┤
+│                requests │                27 │                0 │
+├─────────────────────────┼───────────────────┼──────────────────┤
+│            test-scripts │                27 │                0 │
+├─────────────────────────┼───────────────────┼──────────────────┤
+│      prerequest-scripts │                 0 │                0 │
+├─────────────────────────┼───────────────────┼──────────────────┤
+│              assertions │                58 │                0 │
+├─────────────────────────┴───────────────────┴──────────────────┤
+│ total run duration: 3.1s                                       │
+├────────────────────────────────────────────────────────────────┤
+│ total data received: 611B (approx)                             │
+├────────────────────────────────────────────────────────────────┤
+│ average response time: 16ms [min: 5ms, max: 220ms, s.d.: 40ms] │
+└────────────────────────────────────────────────────────────────┘
+exit=0
